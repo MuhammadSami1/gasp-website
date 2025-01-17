@@ -1,6 +1,9 @@
 "use client";
 import { useRef, useState } from "react";
-
+import Button from "@/app/components/ui/Button";
+import { TiLocationArrow } from "react-icons/ti";
+import gsap from "gsap";
+import { useGSAP } from "@gsap/react";
 const Hero = () => {
   const [currentIndex, setCurrentIndex] = useState(1);
   const [loading, setLoading] = useState(true);
@@ -8,7 +11,7 @@ const Hero = () => {
   const [loadedVideos, setLoadedVideos] = useState(0);
 
   const totalVideos = 4;
-  const nextVideoRef = useRef(null);
+  const nextVideoRef = useRef<HTMLVideoElement | null>(null);
 
   // 0 % 4 = 0 + 1 = 1
   // 1 % 4 = 1 + 1 = 2
@@ -27,6 +30,35 @@ const Hero = () => {
   const handleVideoLoaded = () => {
     setLoadedVideos((prev) => prev + 1);
   };
+
+  useGSAP(
+    () => {
+      if (hasClicked) {
+        gsap.set("#next-video", { visibility: "visible" });
+
+        gsap.to("#next-video", {
+          transformOrigin: "center center",
+          scale: 1,
+          width: "100%",
+          height: "100%",
+          duration: 1,
+          ease: "power1.inOut",
+          onStart: () => {
+            nextVideoRef.current?.play();
+          },
+        });
+
+        gsap.from("#current-video", {
+          transformOrigin: "center center",
+          scale: 0,
+          duration: 1.5,
+          ease: "power1.inOut",
+        });
+      }
+    },
+    { dependencies: [currentIndex], revertOnUpdate: true }
+  );
+
   const getVideoSrc = (index: number) => `videos/hero-${index}.mp4`;
   return (
     <div className="relative h-dvh overflow-x-hidden w-screen">
@@ -71,7 +103,32 @@ const Hero = () => {
             onLoadedData={handleVideoLoaded}
           ></video>
         </div>
+
+        <h1 className="hero-heading special-font  absolute bottom-5 right-5 z-40 text-blue-75">
+          G<b>A</b>MING
+        </h1>
+
+        <div className="absolute left-0 top-0 z-40 size-full">
+          <div className="mt-24 px-5 sm:px-10">
+            <h1 className="special-font hero-heading text-blue-100">
+              redefi<b>n</b>e
+            </h1>
+
+            <p className="mb-5 max-w-64 font-robert-regular text-blue-100">
+              Enter the Metagame Layer <br /> Unleash the Play Economy
+            </p>
+            <Button
+              id="watch-trailer"
+              title="Watch trailer"
+              leftIcon={<TiLocationArrow />}
+              containerClass="bg-yellow-300 flex-center gap-1"
+            />
+          </div>
+        </div>
       </div>
+      <h1 className="special-font hero-heading absolute bottom-5 right-5 text-black">
+        G<b>A</b>MING
+      </h1>
     </div>
   );
 };

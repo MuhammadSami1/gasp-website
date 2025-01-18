@@ -1,9 +1,13 @@
 "use client";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Button from "@/app/components/ui/Button";
 import { TiLocationArrow } from "react-icons/ti";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
+import { ScrollTrigger } from "gsap/all";
+
+gsap.registerPlugin(ScrollTrigger);
+
 const Hero = () => {
   const [currentIndex, setCurrentIndex] = useState(1);
   const [loading, setLoading] = useState(true);
@@ -12,6 +16,12 @@ const Hero = () => {
 
   const totalVideos = 4;
   const nextVideoRef = useRef<HTMLVideoElement | null>(null);
+
+  useEffect(() => {
+    if (loadedVideos === totalVideos - 4) {
+      setLoading(false);
+    }
+  }, [loadedVideos]);
 
   // 0 % 4 = 0 + 1 = 1
   // 1 % 4 = 1 + 1 = 2
@@ -59,9 +69,36 @@ const Hero = () => {
     { dependencies: [currentIndex], revertOnUpdate: true }
   );
 
+  useGSAP(() => {
+    gsap.set("#video-frame", {
+      clipPath: "polygon(14% 0, 72% 0, 88% 90%, 0 95%)",
+      borderRadius: "0% 0% 40% 10%",
+    });
+    gsap.from("#video-frame", {
+      clipPath: "polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)",
+      borderRadius: "0% 0% 0% 0%",
+      ease: "power1.inOut",
+      scrollTrigger: {
+        trigger: "#video-frame",
+        start: "center center",
+        end: "bottom center",
+        scrub: true,
+      },
+    });
+  }, {});
+
   const getVideoSrc = (index: number) => `videos/hero-${index}.mp4`;
   return (
     <div className="relative h-dvh overflow-x-hidden w-screen">
+      {loading && (
+        <div className="flex-center overflow-hidden absolute z-[100] h-dvh w-screen bg-violet-50">
+          <div className="three-body">
+            <div className="three-body__dot"></div>
+            <div className="three-body__dot"></div>
+            <div className="three-body__dot"></div>
+          </div>
+        </div>
+      )}
       <div
         id="video-frame"
         className="relative overflow-hidden bg-blue-75 z-10 w-screen h-dvh rounded-lg"

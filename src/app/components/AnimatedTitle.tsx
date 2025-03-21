@@ -8,9 +8,14 @@ gsap.registerPlugin(ScrollTrigger);
 type TAnimatedTitle = {
   title: string;
   containerClass?: string;
+  className?: string;
 };
 
-const AnimatedTitle = ({ title, containerClass }: TAnimatedTitle) => {
+const AnimatedTitle = ({
+  title,
+  containerClass,
+  className,
+}: TAnimatedTitle) => {
   const containerRef = useRef(null);
 
   useEffect(() => {

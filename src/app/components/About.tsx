@@ -1,26 +1,28 @@
 "use client";
-import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
-import Image from "next/image";
+import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from "gsap/all";
+
 import AnimatedTitle from "./AnimatedTitle";
+import Image from "next/image";
 
 gsap.registerPlugin(ScrollTrigger);
+
 const About = () => {
   useGSAP(() => {
-    const clip = gsap.timeline({
+    const clipAnimation = gsap.timeline({
       scrollTrigger: {
-        trigger: "clip",
+        trigger: "#clip",
         start: "center center",
-        end: "+=800  center",
+        end: "+=800 center",
         scrub: 0.5,
         pin: true,
         pinSpacing: true,
       },
     });
 
-    clip.to(".mask-clip-path", {
-      width: "170vh",
+    clipAnimation.to(".mask-clip-path", {
+      width: "100vw",
       height: "100vh",
       borderRadius: 0,
     });
@@ -50,10 +52,10 @@ const About = () => {
       <div className="h-dvh w-screen" id="clip">
         <div className="mask-clip-path about-image">
           <Image
+            width={1000}
+            height={1000}
             src="/img/about.webp"
             alt="Background"
-            width="1000"
-            height="1000"
             className="absolute left-0 top-0 size-full object-cover"
           />
         </div>

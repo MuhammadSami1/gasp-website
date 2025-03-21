@@ -2,14 +2,20 @@ import clsx from "clsx";
 import { IconType } from "react-icons";
 
 type TButtonProps = {
-  id: string;
-  leftIcon: React.ReactNode;
-  // rightIcon: ,
+  id?: string;
+  leftIcon?: React.ReactNode;
+  rightIcon?: React.ReactNode;
   title: string;
   containerClass: string;
 };
 
-const Button = ({ id, leftIcon, title, containerClass }: TButtonProps) => {
+const Button = ({
+  id,
+  leftIcon,
+  title,
+  containerClass,
+  rightIcon,
+}: TButtonProps) => {
   return (
     <button
       id={id}
@@ -29,7 +35,7 @@ const Button = ({ id, leftIcon, title, containerClass }: TButtonProps) => {
         </div>
       </span>
 
-      {/* {rightIcon} */}
+      {rightIcon}
     </button>
   );
 };
